@@ -1,0 +1,40 @@
+﻿@page "/"
+
+<h3>Add Websites</h3>
+
+<input @bind="newWebsite" placeholder="Enter website..." />
+<button @onclick="AddWebsite">+</button>
+
+<br />
+<br />
+<br />
+@if (websites.Count == 0) {
+        <p>No websites added yet. Type in the box and press + to add a website...</p>
+}
+else {
+        <div class="grid">
+        @foreach (var website in websites) {
+            <div class="grid-item">
+                <a href="@website.Url" target="_blank">@website.Name</a>
+            </div>
+        }
+        </div>
+}
+
+@code {
+    string newWebsite;
+    List<Website> websites = new List<Website>();
+
+    void AddWebsite() {
+        if (!string.IsNullOrWhiteSpace(newWebsite)) {
+            var websiteName = newWebsite.Replace("www.", "").Replace(".com", "").Replace(".pl", "");
+            websites.Add(new Website { Name = websiteName, Url = newWebsite });
+            newWebsite = string.Empty;
+        }
+    }
+
+    public class Website {
+        public string Name { get; set; }
+        public string Url { get; set; }
+    }
+}
